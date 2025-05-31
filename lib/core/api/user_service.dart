@@ -2,6 +2,8 @@ import 'dart:convert'; // For json.decode
 import 'dart:developer';
 
 import 'package:flutter_user_bloc_assessment/core/env_service.dart';
+import 'package:flutter_user_bloc_assessment/core/models/post_models/post_list_response.dart';
+import 'package:flutter_user_bloc_assessment/core/models/todo_models/todo_list_response.dart';
 import 'package:flutter_user_bloc_assessment/core/models/user_model/user_list_response.dart';
 import 'package:http/http.dart' as http; // Use 'as http' to avoid name clashes
 
@@ -79,6 +81,50 @@ class UserService {
       throw Exception(
         'Failed to load users. Check network connection or API status. Error: $e',
       );
+    }
+  }
+
+  // --- User Posts ---
+  Future<PostListResponse> fetchUserPosts(int userId) async {
+    final url = Uri.parse(_userPostsEndpoint(userId));
+    log('Fetching posts for user $userId: $url');
+    try {
+      final response = await client.get(url);
+      if (response.statusCode == 200) {
+        log('Posts Response body: ${response.body}');
+        final Map<String, dynamic> jsonBody = json.decode(response.body);
+        return PostListResponse.fromJson(jsonBody);
+      } else {
+        log('Error fetching posts: ${response.statusCode} - ${response.body}');
+        throw Exception(
+          'Failed to load posts for user $userId: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      log('Exception in fetchUserPosts: $e');
+      throw Exception('Failed to load posts. Error: $e');
+    }
+  }
+
+  // --- User Todos  ---
+  Future<TodoListResponse> fetchUserTodos(int userId) async {
+    final url = Uri.parse(_userTodosEndpoint(userId));
+    log('Fetching todos for user $userId: $url');
+    try {
+      final response = await client.get(url);
+      if (response.statusCode == 200) {
+        log('Todo Response body: ${response.body}');
+        final Map<String, dynamic> jsonBody = json.decode(response.body);
+        return TodoListResponse.fromJson(jsonBody);
+      } else {
+        log('Error fetching todo: ${response.statusCode} - ${response.body}');
+        throw Exception(
+          'Failed to load todo for user $userId: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      log('Exception in fetchUserTodos: $e');
+      throw Exception('Failed to load todo. Error: $e');
     }
   }
 }
