@@ -22,7 +22,7 @@ class UserService {
   String _userTodosEndpoint(int userId) => "$_baseUrl/todos/user/$userId";
 
   // --- User List ---
-  Future<UserListResponse> fetchUserList({
+  Future<UserListResponse?> fetchUserList({
     int limit = 10,
     int skip = 0,
     String? query,
@@ -48,14 +48,8 @@ class UserService {
           log('Search Response body: ${response.body}');
           final Map<String, dynamic> jsonBody = json.decode(response.body);
           return UserListResponse.fromJson(jsonBody);
-        } else {
-          log(
-            'Error fetching users (search): ${response.statusCode} - ${response.body}',
-          );
-          throw Exception(
-            'Failed to load users (search): ${response.statusCode}',
-          );
         }
+        return null;
       } else {
         // Normal fetch without search
         final Uri usersUrl = Uri.parse(
