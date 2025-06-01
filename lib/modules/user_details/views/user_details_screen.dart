@@ -1,7 +1,9 @@
+// file: lib/modules/user_details/views/user_details_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/bloc/user_details_bloc.dart';
-import 'package:flutter_user_bloc_assessment/modules/user_details/views/user_details_view.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/views/user_details_view.dart'; // For retry logic
 import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/user_info_header_widget.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/user_post_tab_widget.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/user_todo_tab_widget.dart';
@@ -9,11 +11,27 @@ import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/u
 class UserDetailsScreen extends StatelessWidget {
   const UserDetailsScreen({super.key});
 
+  // Estimate or define your TabBar height.
+  // kTextTabBarHeight is typically 46.0 for text-only tabs.
+  // If your tabs have icons AND text, it might be closer to 72.0 (kTabLabelPad * 2 + iconSize + textHeight).
+  // It's best to inspect or use a theme value if available.
+  // For tabs with Icon and Text, kToolbarHeight (56.0) or a bit more might be a closer estimate if kTextTabBarHeight is too small.
+  // Let's use a common value, but be prepared to adjust this.
+  static const double tabBarEstimatedHeight = 5.0; // Default for icon and text tabs by Material Design spec.
+  // kTextTabBarHeight is 46.0
+
   @override
   Widget build(BuildContext context) {
+    // You can also try to get it from theme:
+    // final double actualTabBarHeight = Theme.of(context).appBarTheme.toolbarHeight ?? kToolbarHeight; // This is for AppBar itself
+    // Or more specifically for TabBar if set in theme:
+    // final double actualTabBarHeight = Theme.of(context).tabBarTheme.labelPadding?.verticalSymmetricTotalHeight ?? kTextTabBarHeight;
+    // For simplicity, we'll use the constant above.
+
     return Scaffold(
       body: BlocConsumer<UserDetailsBloc, UserDetailsState>(
         listener: (context, state) {
+          // Your listener code (keep as is)
           if (state.errorMessage != null &&
               (state.postsStatus == UserDetailsStatus.failure ||
                   state.todosStatus == UserDetailsStatus.failure ||
@@ -27,14 +45,14 @@ class UserDetailsScreen extends StatelessWidget {
                   action: SnackBarAction(
                     label: 'Retry All',
                     onPressed: () {
-                      final screenWidget =
+                      final detailsViewWidget =
                           context
                               .findAncestorWidgetOfExactType<UserDetailsView>();
-                      if (screenWidget != null) {
+                      if (detailsViewWidget != null) {
                         context.read<UserDetailsBloc>().add(
                           UserDetailsEventFetchAllDetails(
-                            userId: screenWidget.userId,
-                            initialUser: screenWidget.initialUser,
+                            userId: detailsViewWidget.userId,
+                            initialUser: detailsViewWidget.initialUser,
                           ),
                         );
                       }
@@ -45,13 +63,11 @@ class UserDetailsScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          // Initial loading state for the user object itself
+          // Your loading and error handling for the main user (keep as is)
           if (state.userState == UserDetailsStatus.loading &&
               state.user == null) {
             return const Center(child: CircularProgressIndicator());
           }
-
-          // Failure to load the main user object
           if (state.userState == UserDetailsStatus.failure &&
               state.user == null) {
             return Center(
@@ -62,14 +78,14 @@ class UserDetailsScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      final screenWidget =
+                      final detailsViewWidget =
                           context
                               .findAncestorWidgetOfExactType<UserDetailsView>();
-                      if (screenWidget != null) {
+                      if (detailsViewWidget != null) {
                         context.read<UserDetailsBloc>().add(
                           UserDetailsEventFetchAllDetails(
-                            userId: screenWidget.userId,
-                            initialUser: screenWidget.initialUser,
+                            userId: detailsViewWidget.userId,
+                            initialUser: detailsViewWidget.initialUser,
                           ),
                         );
                       }
@@ -81,10 +97,7 @@ class UserDetailsScreen extends StatelessWidget {
             );
           }
 
-          // If user data is available (either initial or fetched successfully)
           final user = state.user;
-
-          // If user is null even after attempting load (should be covered by above), show error.
           if (user == null) {
             return Center(
               child: Text(state.errorMessage ?? 'User data not available.'),
@@ -92,50 +105,46 @@ class UserDetailsScreen extends StatelessWidget {
           }
 
           return DefaultTabController(
-            length: 2, // For Posts and Todos
+            length: 2,
             child: NestedScrollView(
               headerSliverBuilder: (
                 BuildContext context,
                 bool innerBoxIsScrolled,
               ) {
                 return <Widget>[
-                  SliverOverlapAbsorber(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                      context,
+                  // No SliverOverlapAbsorber
+                  SliverAppBar(
+                    title: Text(user.fullName),
+                    pinned: true,
+                    expandedHeight: 300.0,
+                    forceElevated: innerBoxIsScrolled,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: UserInfoHeaderWidget(user: user),
+                      collapseMode: CollapseMode.parallax,
                     ),
-                    sliver: SliverAppBar(
-                      title: Text(user.fullName), // App bar title
-                      pinned: true,
-                      expandedHeight: 300.0, // Adjusted height for more info
-                      forceElevated: innerBoxIsScrolled,
-                      flexibleSpace: FlexibleSpaceBar(
-                        // title: Text(user.firstName, style: TextStyle(color: Colors.white)), // Optional title in flex space
-                        background: UserInfoHeaderWidget(
-                          user: user,
-                        ), // Use the new widget
-                        collapseMode: CollapseMode.parallax,
-                      ),
-                      bottom: const TabBar(
-                        tabs: [
-                          Tab(
-                            icon: Icon(Icons.article_outlined),
-                            text: 'Posts',
-                          ), // Updated icons
-                          Tab(
-                            icon: Icon(Icons.checklist_rtl_outlined),
-                            text: 'Todos',
-                          ), // Updated icons
-                        ],
-                      ),
+                    bottom: TabBar(
+                      // This TabBar's height needs to be accounted for
+                      indicatorColor: Theme.of(context).colorScheme.onPrimary,
+                      labelColor: Theme.of(context).colorScheme.onPrimary,
+                      unselectedLabelColor: Theme.of(
+                        context,
+                      ).colorScheme.onPrimary.withOpacity(0.7),
+                      tabs: const [
+                        Tab(icon: Icon(Icons.article_outlined), text: 'Posts'),
+                        Tab(
+                          icon: Icon(Icons.checklist_rtl_outlined),
+                          text: 'Todos',
+                        ),
+                      ],
                     ),
                   ),
                 ];
               },
+              // The body's children are now simpler, padding handled internally by tab widgets
               body: const TabBarView(
-                children: [
-                  // Provide BLoC context if needed by tabs, or they can use context.watch
-                  UserPostsTabWidget(),
-                  UserTodosTabWidget(),
+                children: <Widget>[
+                  UserPostsTabWidget(topPadding: tabBarEstimatedHeight),
+                  UserTodosTabWidget(topPadding: tabBarEstimatedHeight),
                 ],
               ),
             ),
