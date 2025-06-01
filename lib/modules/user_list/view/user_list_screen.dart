@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/create_post/view/create_post_view.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/views/user_details_view.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_list/bloc/user_list_bloc.dart';
 
@@ -198,12 +199,9 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 
   void _navigateToCreatePost() {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (_) => const CreatePostScreen(),
-    // ));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Navigate to create post screen')),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const CreatePostView()));
   }
 
   @override

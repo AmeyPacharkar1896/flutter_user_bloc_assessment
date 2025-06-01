@@ -10,23 +10,10 @@ import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/u
 
 class UserDetailsScreen extends StatelessWidget {
   const UserDetailsScreen({super.key});
-
-  // Estimate or define your TabBar height.
-  // kTextTabBarHeight is typically 46.0 for text-only tabs.
-  // If your tabs have icons AND text, it might be closer to 72.0 (kTabLabelPad * 2 + iconSize + textHeight).
-  // It's best to inspect or use a theme value if available.
-  // For tabs with Icon and Text, kToolbarHeight (56.0) or a bit more might be a closer estimate if kTextTabBarHeight is too small.
-  // Let's use a common value, but be prepared to adjust this.
   static const double tabBarEstimatedHeight = 5.0; // Default for icon and text tabs by Material Design spec.
-  // kTextTabBarHeight is 46.0
 
   @override
   Widget build(BuildContext context) {
-    // You can also try to get it from theme:
-    // final double actualTabBarHeight = Theme.of(context).appBarTheme.toolbarHeight ?? kToolbarHeight; // This is for AppBar itself
-    // Or more specifically for TabBar if set in theme:
-    // final double actualTabBarHeight = Theme.of(context).tabBarTheme.labelPadding?.verticalSymmetricTotalHeight ?? kTextTabBarHeight;
-    // For simplicity, we'll use the constant above.
 
     return Scaffold(
       body: BlocConsumer<UserDetailsBloc, UserDetailsState>(
