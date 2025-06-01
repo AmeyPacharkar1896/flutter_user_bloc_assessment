@@ -5,6 +5,7 @@ import 'package:flutter_user_bloc_assessment/core/env_service.dart';
 import 'package:flutter_user_bloc_assessment/core/models/post_models/post_list_response.dart';
 import 'package:flutter_user_bloc_assessment/core/models/todo_models/todo_list_response.dart';
 import 'package:flutter_user_bloc_assessment/core/models/user_model/user_list_response.dart';
+import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
 import 'package:http/http.dart' as http; // Use 'as http' to avoid name clashes
 
 class UserService {
@@ -18,6 +19,7 @@ class UserService {
   }
 
   String get _usersBaseEndpoint => "$_baseUrl/users";
+  String _userDetailsEndpoint(int userId) => "$_usersBaseEndpoint/$userId";
   String _userPostsEndpoint(int userId) => "$_baseUrl/posts/user/$userId";
   String _userTodosEndpoint(int userId) => "$_baseUrl/todos/user/$userId";
 
@@ -75,6 +77,30 @@ class UserService {
       throw Exception(
         'Failed to load users. Check network connection or API status. Error: $e',
       );
+    }
+  }
+
+  // ---User Details ---
+  Future<User> fetchUserDetails(int userId) async {
+    final Uri userDetailsUrl = Uri.parse(_userDetailsEndpoint(userId));
+    log('Fetching user details: $userDetailsUrl');
+    try {
+      final response = await client.get(userDetailsUrl);
+      if (response.statusCode == 200) {
+        log('User Details Response body: ${response.body}');
+        final Map<String, dynamic> jsonBody = json.decode(response.body);
+        return User.fromJson(jsonBody);
+      } else {
+        log(
+          'Error fetching user details: ${response.statusCode} - ${response.body}',
+        );
+        throw Exception(
+          'Failed to load user Details for user $userId: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      log('Exception in fetchUserDetails: $e');
+      throw Exception('Failed to load user details.Error $e');
     }
   }
 

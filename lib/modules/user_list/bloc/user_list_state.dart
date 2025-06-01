@@ -7,15 +7,14 @@ abstract class UserListState extends Equatable {
   List<Object?> get props => [];
 }
 
-class UserListStateInitial
-    extends UserListState {} // Good to have an initial state
+class UserListStateInitial extends UserListState {}
 
 class UserListStateLoading extends UserListState {}
 
 class UserListStateLoaded extends UserListState {
   final List<User> users;
-  final bool hasReachedMax; // To know if more users can be loaded
-  final String? currentQuery; // To keep track of search query during pagination
+  final bool hasReachedMax;
+  final String? currentQuery;
 
   const UserListStateLoaded({
     required this.users,
@@ -26,8 +25,8 @@ class UserListStateLoaded extends UserListState {
   UserListStateLoaded copyWith({
     List<User>? users,
     bool? hasReachedMax,
-    String? currentQuery, // Allow null to clear query
-    bool clearQuery = false, // Helper to explicitly clear query
+    String? currentQuery,
+    bool clearQuery = false,
   }) {
     return UserListStateLoaded(
       users: users ?? this.users,

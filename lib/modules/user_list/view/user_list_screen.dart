@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/views/user_details_view.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_list/bloc/user_list_bloc.dart';
 
 class UserListScreen extends StatefulWidget {
@@ -17,7 +18,6 @@ class _UserListScreenState extends State<UserListScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<UserListBloc>().add(UserListFetchUsers());
     _scrollController.addListener(_onScroll);
     _searchController.addListener(_onSearchChange);
   }
@@ -190,11 +190,10 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 
   void _navigateToUserDetail(User user) {
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (_) => UserDetailScreen(userId: user.id), // Pass userId or User object
-    // ));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Navigate to detail for ${user.fullName}')),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => UserDetailsView(userId: user.id, initialUser: user),
+      ),
     );
   }
 

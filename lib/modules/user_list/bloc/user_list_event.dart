@@ -9,8 +9,7 @@ abstract class UserListEvent extends Equatable {
 
 // Event to fetch the initial list or refresh
 class UserListFetchUsers extends UserListEvent {
-  final bool
-  isRefresh; // Optional: to handle pull-to-refresh differently if needed
+  final bool isRefresh;
   const UserListFetchUsers({this.isRefresh = false});
 }
 

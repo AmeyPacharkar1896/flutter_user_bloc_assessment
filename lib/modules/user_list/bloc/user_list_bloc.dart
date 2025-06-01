@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:flutter_user_bloc_assessment/core/api/user_service.dart';
+import 'package:flutter_user_bloc_assessment/core/service/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
@@ -31,7 +31,7 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
       _onUserListSearchUsers,
       transformer: debounceDroppable(const Duration(milliseconds: 500)),
     );
-    on<UserListFetchMoreUsers>(_onFetchMoreUsers);
+    on<UserListFetchMoreUsers>(_onUserListFetchMoreUsers);
   }
 
   Future<void> _onUserListFetchUsers(
@@ -94,7 +94,7 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
     }
   }
 
-  Future<void> _onFetchMoreUsers(
+  Future<void> _onUserListFetchMoreUsers(
     UserListFetchMoreUsers event,
     Emitter<UserListState> emit,
   ) async {
