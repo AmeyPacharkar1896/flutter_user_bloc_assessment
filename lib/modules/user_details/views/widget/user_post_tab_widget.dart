@@ -3,51 +3,78 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/bloc/user_details_bloc.dart';
+// Assuming your Post model is here:
+// import 'package:flutter_user_bloc_assessment/core/models/post_models/post_model.dart';
 
 class UserPostsTabWidget extends StatelessWidget {
-  final double topPadding; // To receive the estimated TabBar height
-
-  const UserPostsTabWidget({super.key, required this.topPadding});
+  const UserPostsTabWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Watch the BLoC state for updates
     final state = context.watch<UserDetailsBloc>().state;
 
+    // Handle loading state for posts
     if (state.postsStatus == UserDetailsStatus.loading) {
       return const Center(child: CircularProgressIndicator());
     }
+
+    // Handle failure state for posts
     if (state.postsStatus == UserDetailsStatus.failure) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            state.errorMessage ??
-                'Failed to load posts. Please try refreshing.',
-            textAlign: TextAlign.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                state.errorMessage ?? 'Failed to load posts.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  // To retry, we need the userId. Assuming UserDetailsBloc holds it
+                  // or we can get it from the state.user if it's loaded.
+                  final userId = state.user?.id;
+                  if (userId != null) {
+                    context.read<UserDetailsBloc>().add(
+                      UserDetailsEventFetchAllDetails(
+                        userId: userId,
+                        initialUser: state.user,
+                      ),
+                      // Or a more specific event like FetchUserPostsEvent(userId) if you create one
+                    );
+                  }
+                },
+                child: const Text('Retry Posts'),
+              ),
+            ],
           ),
         ),
       );
     }
+
+    // Handle empty state for posts
     if (state.posts.isEmpty) {
-      return const Center(child: Text('No posts found for this user.'));
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text('No posts found for this user.'),
+        ),
+      );
     }
 
+    // Display the list of posts
     return ListView.builder(
-      // Apply padding: topPadding for the TabBar, +8.0 for general list padding
-      padding: EdgeInsets.fromLTRB(8.0, topPadding + 8.0, 8.0, 8.0),
-      // physics: AlwaysScrollableScrollPhysics(), // Add for testing if needed
-      itemCount: state.posts.length, // Or 50 for testing scrollability
+      padding: const EdgeInsets.all(8.0), // General padding for the list
+      itemCount: state.posts.length,
       itemBuilder: (context, index) {
-        // FOR TESTING with 50 items:
-        // if (state.posts.isEmpty) {
-        //   return Card(child: ListTile(title: Text('Test Post Item ${index + 1} for padding')));
-        // }
-        // final post = state.posts[index % state.posts.length];
         final post = state.posts[index];
-
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 6.0),
           elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -63,34 +90,46 @@ class UserPostsTabWidget extends StatelessWidget {
                 Text(
                   post.body,
                   style: Theme.of(context).textTheme.bodyMedium,
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
+                  // maxLines: 4, // Keep if you want to limit lines
+                  // overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Views: ${post.views}',
-                      style: Theme.of(context).textTheme.bodySmall,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.visibility_outlined,
+                          size: 16,
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.color?.withOpacity(0.7),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Views: ${post.views}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                     ),
                     Row(
                       children: [
                         Icon(
                           Icons.thumb_up_alt_outlined,
                           size: 16,
-                          color: Colors.green,
+                          color: Colors.green.shade600,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           '${post.reactions.likes}',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 10),
                         Icon(
                           Icons.thumb_down_alt_outlined,
                           size: 16,
-                          color: Colors.red,
+                          color: Colors.red.shade600,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -102,7 +141,7 @@ class UserPostsTabWidget extends StatelessWidget {
                   ],
                 ),
                 if (post.tags.isNotEmpty) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Wrap(
                     spacing: 6.0,
                     runSpacing: 4.0,
@@ -110,13 +149,16 @@ class UserPostsTabWidget extends StatelessWidget {
                         post.tags
                             .map(
                               (tag) => Chip(
-                                label: Text(
-                                  tag,
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                label: Text(tag),
+                                labelStyle:
+                                    Theme.of(context).textTheme.labelSmall,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4.0,
+                                  vertical: 0.0,
                                 ),
-                                padding: EdgeInsets.zero,
                                 materialTapTargetSize:
                                     MaterialTapTargetSize.shrinkWrap,
+                                visualDensity: VisualDensity.compact,
                               ),
                             )
                             .toList(),

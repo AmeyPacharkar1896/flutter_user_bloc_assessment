@@ -1,3 +1,4 @@
+// file: lib/modules/user_details/views/widget/user_info_header_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_model.dart';
 
@@ -9,25 +10,18 @@ class UserInfoHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final onPrimaryColor =
-        Theme.of(
-          context,
-        ).colorScheme.onPrimary; // For text on primary background
+    // For a header section, you might want to use card-like styling or just padding
+    // The background color will come from its parent or be transparent.
 
     return Container(
-      // Added a background color for the header area if image is transparent or fails
-      color: Theme.of(context).primaryColor,
-      padding: const EdgeInsets.all(16.0).copyWith(
-        top:
-            kToolbarHeight +
-            MediaQuery.of(context).padding.top +
-            16, // Account for status bar & AppBar
+      padding: const EdgeInsets.all(16.0),
+      // color: Theme.of(context).colorScheme.surfaceVariant, // Optional: subtle background
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor, // Match your app bar color
+        // boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))]
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment:
-            MainAxisAlignment
-                .end, // Align content to the bottom of flexible space
         children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,12 +29,14 @@ class UserInfoHeaderWidget extends StatelessWidget {
               CircleAvatar(
                 radius: 40,
                 backgroundImage: NetworkImage(user.image),
-                onBackgroundImageError: (exception, stackTrace) {
-                  // Optionally log error or show placeholder indication
-                },
+                onBackgroundImageError: (exception, stackTrace) {},
                 child:
                     user.image.isEmpty
-                        ? Icon(Icons.person, size: 40, color: onPrimaryColor)
+                        ? Icon(
+                          Icons.person,
+                          size: 40,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        )
                         : null,
               ),
               const SizedBox(width: 16),
@@ -52,7 +48,7 @@ class UserInfoHeaderWidget extends StatelessWidget {
                     Text(
                       user.fullName,
                       style: textTheme.headlineSmall?.copyWith(
-                        color: onPrimaryColor,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,
@@ -62,7 +58,9 @@ class UserInfoHeaderWidget extends StatelessWidget {
                     Text(
                       user.email,
                       style: textTheme.titleMedium?.copyWith(
-                        color: onPrimaryColor.withOpacity(0.85),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onPrimary.withOpacity(0.85),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -72,11 +70,10 @@ class UserInfoHeaderWidget extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20), // Increased spacing
+          const SizedBox(height: 20),
           Wrap(
-            // Use Wrap for better layout of details if they overflow
-            spacing: 16.0, // Horizontal space between items
-            runSpacing: 8.0, // Vertical space between lines
+            spacing: 16.0,
+            runSpacing: 8.0,
             children: [
               _buildDetailItem(
                 context,
@@ -100,27 +97,28 @@ class UserInfoHeaderWidget extends StatelessWidget {
                     : Icons.female_outlined,
                 'Gender: ${user.gender}',
               ),
-              // Add more user details as needed
-              // _buildDetailItem(context, Icons.location_city_outlined, 'City: ${user.address.city}'),
             ],
           ),
-          const SizedBox(height: 10), // Some padding at the bottom
+          // No need for SizedBox(height: 10) at the end if it's the last item in its container.
         ],
       ),
     );
   }
 
   Widget _buildDetailItem(BuildContext context, IconData icon, String text) {
-    final onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
     return Row(
-      mainAxisSize: MainAxisSize.min, // Important for Wrap
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 16, color: onPrimaryColor.withOpacity(0.85)),
+        Icon(
+          icon,
+          size: 16,
+          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.85),
+        ),
         const SizedBox(width: 6),
         Text(
           text,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: onPrimaryColor.withOpacity(0.85),
+            color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.85),
           ),
         ),
       ],

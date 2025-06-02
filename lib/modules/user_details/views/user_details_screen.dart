@@ -10,16 +10,15 @@ import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/u
 
 class UserDetailsScreen extends StatelessWidget {
   const UserDetailsScreen({super.key});
-  static const double tabBarEstimatedHeight = 5.0; // Default for icon and text tabs by Material Design spec.
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      // No separate Scaffold.appBar here, it's handled by SliverAppBar
       body: BlocConsumer<UserDetailsBloc, UserDetailsState>(
         listener: (context, state) {
-          // Your listener code (keep as is)
-          if (state.errorMessage != null &&
+          // Your listener code (for SnackBars)
+           if (state.errorMessage != null &&
               (state.postsStatus == UserDetailsStatus.failure ||
                   state.todosStatus == UserDetailsStatus.failure ||
                   (state.userState == UserDetailsStatus.failure &&
@@ -33,15 +32,14 @@ class UserDetailsScreen extends StatelessWidget {
                     label: 'Retry All',
                     onPressed: () {
                       final detailsViewWidget =
-                          context
-                              .findAncestorWidgetOfExactType<UserDetailsView>();
+                          context.findAncestorWidgetOfExactType<UserDetailsView>();
                       if (detailsViewWidget != null) {
                         context.read<UserDetailsBloc>().add(
-                          UserDetailsEventFetchAllDetails(
-                            userId: detailsViewWidget.userId,
-                            initialUser: detailsViewWidget.initialUser,
-                          ),
-                        );
+                              UserDetailsEventFetchAllDetails(
+                                userId: detailsViewWidget.userId,
+                                initialUser: detailsViewWidget.initialUser,
+                              ),
+                            );
                       }
                     },
                   ),
@@ -50,91 +48,87 @@ class UserDetailsScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          // Your loading and error handling for the main user (keep as is)
-          if (state.userState == UserDetailsStatus.loading &&
-              state.user == null) {
+          // Loading state for the entire screen if user data isn't available yet
+          if (state.userState == UserDetailsStatus.loading && state.user == null) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state.userState == UserDetailsStatus.failure &&
-              state.user == null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.errorMessage ?? 'Failed to load user data.'),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      final detailsViewWidget =
-                          context
-                              .findAncestorWidgetOfExactType<UserDetailsView>();
-                      if (detailsViewWidget != null) {
-                        context.read<UserDetailsBloc>().add(
-                          UserDetailsEventFetchAllDetails(
-                            userId: detailsViewWidget.userId,
-                            initialUser: detailsViewWidget.initialUser,
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
+
+          // Failure state if user data couldn't be loaded
+          if (state.userState == UserDetailsStatus.failure && state.user == null) {
+            return Center( /* ... your error retry UI ... */ );
           }
 
           final user = state.user;
           if (user == null) {
-            return Center(
-              child: Text(state.errorMessage ?? 'User data not available.'),
-            );
+            return Center( /* ... your user data not available UI ... */ );
           }
 
           return DefaultTabController(
-            length: 2,
+            length: 2, // Number of tabs
             child: NestedScrollView(
-              headerSliverBuilder: (
-                BuildContext context,
-                bool innerBoxIsScrolled,
-              ) {
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
-                  // No SliverOverlapAbsorber
-                  SliverAppBar(
-                    title: Text(user.fullName),
-                    pinned: true,
-                    expandedHeight: 300.0,
-                    forceElevated: innerBoxIsScrolled,
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: UserInfoHeaderWidget(user: user),
-                      collapseMode: CollapseMode.parallax,
-                    ),
-                    bottom: TabBar(
-                      // This TabBar's height needs to be accounted for
-                      indicatorColor: Theme.of(context).colorScheme.onPrimary,
-                      labelColor: Theme.of(context).colorScheme.onPrimary,
-                      unselectedLabelColor: Theme.of(
-                        context,
-                      ).colorScheme.onPrimary.withOpacity(0.7),
-                      tabs: const [
-                        Tab(icon: Icon(Icons.article_outlined), text: 'Posts'),
-                        Tab(
-                          icon: Icon(Icons.checklist_rtl_outlined),
-                          text: 'Todos',
-                        ),
-                      ],
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    sliver: SliverAppBar(
+                      // No direct title here to avoid redundancy with UserInfoHeaderWidget when expanded
+                      // title: Text(user.fullName), // REMOVE or use FlexibleSpaceBar.title
+                      pinned: true, // Keeps the TabBar pinned
+                      expandedHeight: 250.0, // Adjust this to fit your UserInfoHeaderWidget comfortably
+                                             // May need to be smaller if UserInfoHeaderWidget is more compact
+                      forceElevated: innerBoxIsScrolled,
+                      leading: IconButton( // Explicitly add a back button
+                        icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onPrimary), // Ensure color contrasts with AppBar
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      flexibleSpace: FlexibleSpaceBar( // Typically false when there's a leading icon
+                        background: UserInfoHeaderWidget(user: user),
+                        collapseMode: CollapseMode.parallax, // Or .pin
+                      ),
+                      bottom: TabBar(
+                        indicatorColor: Theme.of(context).colorScheme.onPrimary,
+                        labelColor: Theme.of(context).colorScheme.onPrimary,
+                        unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withOpacity(0.7),
+                        tabs: const [
+                          Tab(text: 'Posts'), // Keep it simple, icons can make it taller
+                          Tab(text: 'Todos'),
+                        ],
+                      ),
                     ),
                   ),
                 ];
               },
-              // The body's children are now simpler, padding handled internally by tab widgets
-              body: const TabBarView(
+              body: TabBarView(
                 children: <Widget>[
-                  UserPostsTabWidget(topPadding: tabBarEstimatedHeight),
-                  UserTodosTabWidget(topPadding: tabBarEstimatedHeight),
+                  _buildTabContent(context, const UserPostsTabWidget(), 'posts_key'),
+                  _buildTabContent(context, const UserTodosTabWidget(), 'todos_key'),
                 ],
               ),
             ),
+          );
+        },
+      ),
+    );
+  }
+
+  // Helper method from before - this correctly handles overlap
+  Widget _buildTabContent(BuildContext context, Widget tabChild, String pageStorageKey) {
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Builder(
+        builder: (BuildContext context) {
+          return CustomScrollView(
+            key: PageStorageKey<String>(pageStorageKey),
+            slivers: <Widget>[
+              SliverOverlapInjector(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              ),
+              SliverFillRemaining(
+                hasScrollBody: true,
+                child: tabChild,
+              ),
+            ],
           );
         },
       ),

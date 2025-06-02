@@ -3,50 +3,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/bloc/user_details_bloc.dart';
+// Assuming your Todo model is here:
+// import 'package:flutter_user_bloc_assessment/core/models/todo_models/todo_model.dart';
 
 class UserTodosTabWidget extends StatelessWidget {
-  final double topPadding; // To receive the estimated TabBar height
-
-  const UserTodosTabWidget({super.key, required this.topPadding});
+  const UserTodosTabWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Watch the BLoC state for updates
     final state = context.watch<UserDetailsBloc>().state;
 
+    // Handle loading state for todos
     if (state.todosStatus == UserDetailsStatus.loading) {
       return const Center(child: CircularProgressIndicator());
     }
+
+    // Handle failure state for todos
     if (state.todosStatus == UserDetailsStatus.failure) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            state.errorMessage ??
-                'Failed to load todos. Please try refreshing.',
-            textAlign: TextAlign.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                state.errorMessage ?? 'Failed to load todos.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  final userId = state.user?.id;
+                  if (userId != null) {
+                    context.read<UserDetailsBloc>().add(
+                      UserDetailsEventFetchAllDetails(
+                        userId: userId,
+                        initialUser: state.user,
+                      ),
+                      // Or a more specific event like FetchUserTodosEvent(userId)
+                    );
+                  }
+                },
+                child: const Text('Retry Todos'),
+              ),
+            ],
           ),
         ),
       );
     }
+
+    // Handle empty state for todos
     if (state.todos.isEmpty) {
-      return const Center(child: Text('No todos found for this user.'));
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text('No todos found for this user.'),
+        ),
+      );
     }
 
+    // Display the list of todos
     return ListView.builder(
-      // Apply padding: topPadding for the TabBar, +8.0 for general list padding
-      padding: EdgeInsets.fromLTRB(8.0, topPadding + 8.0, 8.0, 8.0),
-      itemCount: state.todos.length, // Or 50 for testing
+      padding: const EdgeInsets.all(8.0), // General padding for the list
+      itemCount: state.todos.length,
       itemBuilder: (context, index) {
-        // FOR TESTING with 50 items:
-        // if (state.todos.isEmpty) {
-        //   return Card(child: ListTile(title: Text('Test Todo Item ${index + 1} for padding')));
-        // }
-        // final todo = state.todos[index % state.todos.length];
         final todo = state.todos[index];
-
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 4.0),
           elevation: 1.5,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: ListTile(
             title: Text(
               todo.todo,
@@ -55,6 +81,7 @@ class UserTodosTabWidget extends StatelessWidget {
                       ? TextStyle(
                         decoration: TextDecoration.lineThrough,
                         color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
                       )
                       : null,
             ),
@@ -65,8 +92,14 @@ class UserTodosTabWidget extends StatelessWidget {
               color:
                   todo.completed
                       ? Colors.green
-                      : Theme.of(context).disabledColor,
+                      : Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.6),
             ),
+            // You could add an onTap to toggle completion if your API and BLoC supported it
+            // onTap: () {
+            //   // Dispatch event to toggle todo status
+            // },
           ),
         );
       },
