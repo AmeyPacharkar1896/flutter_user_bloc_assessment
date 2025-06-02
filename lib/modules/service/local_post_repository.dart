@@ -60,4 +60,20 @@ class LocalPostRepository {
     log('[LocalPostRepo] Added new post: ${postWithId.title}');
     return postWithId;
   }
+
+  Future<void> deletePost(int postId) async {
+    try {
+      final List<LocalPostModel> currentPosts = await getLocalPosts();
+      // Remove the post with the matching ID
+      currentPosts.removeWhere((post) => post.id == postId);
+      await saveLocalPosts(currentPosts);
+      log(
+        '[LocalPostRepo] Deleted post with ID: $postId. Remaining posts: ${currentPosts.length}',
+      );
+    } catch (e) {
+      log('[LocalPostRepo] Error deleting post with ID $postId: $e');
+      // Optionally rethrow or handle as needed
+      throw Exception('Failed to delete post: $e');
+    }
+  }
 }
