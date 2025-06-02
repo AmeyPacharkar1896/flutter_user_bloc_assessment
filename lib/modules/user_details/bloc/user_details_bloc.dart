@@ -3,12 +3,12 @@ import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_user_bloc_assessment/core/models/post_models/post_list_response.dart';
-import 'package:flutter_user_bloc_assessment/core/models/post_models/post_model.dart';
-import 'package:flutter_user_bloc_assessment/core/models/todo_models/todo_list_response.dart';
-import 'package:flutter_user_bloc_assessment/core/models/todo_models/todo_model.dart';
-import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
-import 'package:flutter_user_bloc_assessment/core/service/user_service.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/model/post_models/post_list_response.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/model/post_models/post_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/model/todo_models/todo_list_response.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/model/todo_models/todo_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/service/user_service.dart';
 
 part 'user_details_event.dart';
 part 'user_details_state.dart';

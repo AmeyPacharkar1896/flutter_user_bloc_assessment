@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_model.dart';
 
 class UserInfoHeaderWidget extends StatelessWidget {
   final User user;

@@ -2,10 +2,10 @@ import 'dart:convert'; // For json.decode
 import 'dart:developer';
 
 import 'package:flutter_user_bloc_assessment/core/env_service.dart';
-import 'package:flutter_user_bloc_assessment/core/models/post_models/post_list_response.dart';
-import 'package:flutter_user_bloc_assessment/core/models/todo_models/todo_list_response.dart';
-import 'package:flutter_user_bloc_assessment/core/models/user_model/user_list_response.dart';
-import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/model/post_models/post_list_response.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/model/todo_models/todo_list_response.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_list_response.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_model.dart';
 import 'package:http/http.dart' as http; // Use 'as http' to avoid name clashes
 
 class UserService {

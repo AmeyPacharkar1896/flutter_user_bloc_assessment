@@ -31,7 +31,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               );
             _titleController.clear();
             _bodyController.clear();
-            Navigator.pop(context);
+            Navigator.pop(context, state.post);
           } else if (state is CreatePostStateFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()

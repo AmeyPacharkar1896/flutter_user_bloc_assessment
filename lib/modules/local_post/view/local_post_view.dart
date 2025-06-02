@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_user_bloc_assessment/modules/create_post/bloc/create_post_bloc.dart';
-import 'package:flutter_user_bloc_assessment/modules/create_post/view/create_post_screen.dart';
+import 'package:flutter_user_bloc_assessment/modules/local_post/bloc/local_post_bloc.dart';
+import 'package:flutter_user_bloc_assessment/modules/local_post/view/local_post_screen.dart';
 import 'package:flutter_user_bloc_assessment/modules/service/local_post_repository.dart';
 
-class CreatePostView extends StatelessWidget {
-  const CreatePostView({super.key});
+class LocalPostView extends StatelessWidget {
+  const LocalPostView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create:
-          (_) => CreatePostBloc(
+          (context) => LocalPostBloc(
             localPostRepository: RepositoryProvider.of<LocalPostRepository>(
               context,
             ),
           ),
-      child: CreatePostScreen(),
+      child: const LocalPostScreen(),
     );
   }
 }

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:flutter_user_bloc_assessment/core/service/user_service.dart';
+import 'package:flutter_user_bloc_assessment/modules/service/user_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_user_bloc_assessment/core/models/user_model/user_model.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_model.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'user_list_state.dart';
