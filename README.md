@@ -26,7 +26,7 @@ _Shows user-specific information with posts and todos in separate tabs, featurin
 ### 📝 Local Post Creation & Management
 _Functionality for creating, viewing, and deleting locally persisted posts._
 <p float="left">
-  <img src="assets/screenshots/add_post_screen.png" width="200" alt="Create Post Screen">
+  <img src="assets/screenshots/create_post_screen.png" width="200" alt="Create Post Screen">
   <img src="assets/screenshots/local_posts_page.png" width="200" alt="My Posts List">
   <img src="assets/screenshots/local_post_delete.png" width="200" alt="Delete Confirmation">
   <img src="assets/screenshots/no_local_post.png" width="200" alt="No Local Posts">
