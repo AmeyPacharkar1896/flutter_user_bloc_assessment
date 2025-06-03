@@ -8,32 +8,33 @@ Built as part of a Flutter assessment to showcase architectural best practices, 
 
 ## 📸 Screenshots
 
-### 🧑 User List  
+### 🧑 User List
 _Demonstrates user listing, infinite scroll, search, and pull-to-refresh functionality._
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/23ff0642-1c40-43a7-9a3c-f3692f3b34fa" width="200" alt="User List Screen">
+  <img src="https://github.com/user-attachments/assets/a5c73a65-a229-4646-be8a-b0f2ef248e7a" width="200" alt="User List with Infinite Scroll">
+  <img src="https://github.com/user-attachments/assets/4baae105-06e5-4e4e-9a47-809a5469270e" width="200" alt="Search in User List">
+  <img src="https://github.com/user-attachments/assets/cfa35c13-a56a-4a0f-90d2-e91ace8d4b12" width="200" alt="Pull to Refresh User List">
+</p>
 
-![Scrolled User List](assets/screenshots/scrolled_user_home_page.png)  
-![Search in User List](assets/screenshots/search_home_page.png)  
-![Pull to Refresh User List](assets/screenshots/pull_to_refresh_home_page.png)
-
----
-
-### 👤 User Details  
+### 👤 User Details
 _Shows user-specific information with posts and todos in separate tabs, featuring a collapsing header._
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/f908a0f5-d389-464b-85c7-385538b85463" width="200" alt="User Details - Posts Tab">
+  <img src="https://github.com/user-attachments/assets/d623b0a2-5903-49f4-9fb2-5aafcd9db0ad" width="200" alt="User Details - Todos Tab">
+  <img src="https://github.com/user-attachments/assets/33e94f3d-f186-4faf-884b-c94df25f9bc2" width="200" alt="User Details - Collapsed Header (Posts)">
+  <img src="https://github.com/user-attachments/assets/726b5bb6-97e1-4c4e-9ec4-de10fb699528" width="200" alt="User Details - Collapsed Header (Todos)">
+</p>
 
-![User Details](assets/screenshots/user_detail_page.png)  
-![Collapsed Header + Tabs](assets/screenshots/user_detail_todo_collapse.png)
-
----
-
-### 📝 Local Post Creation & Management  
+### 📝 Local Post Creation & Management
 _Functionality for creating, viewing, and deleting locally persisted posts._
-
-![Create Post Screen](https://github.com/user-attachments/assets/5ff4c0aa-4154-4ec4-af22-903c5c42f6f4)
-![My Posts List](assets/screenshots/local_posts_page.png)  
-![Delete Confirmation](assets/screenshots/local_post_delete.png)  
-![No Local Posts](assets/screenshots/no_local_post.png)  
-![Post Creation Success](assets/screenshots/post_created_success.png)
-
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/29fcc0a5-d5d3-4fb7-a9e8-31645379ea13" width="200" alt="Create Post Screen">
+  <img src="https://github.com/user-attachments/assets/1661bc98-5c21-42a1-8d01-b515e2cafa37" width="200" alt="Post Creation Success Feedback">
+  <img src="https://github.com/user-attachments/assets/49758d84-d1ad-4048-bb38-8ac63c3fe3b9" width="200" alt="My Posts List (Local)">
+  <img src="https://github.com/user-attachments/assets/eb7670d6-6b45-443b-b5b6-1b1ea07247c9" width="200" alt="Delete Post Confirmation">
+  <img src="https://github.com/user-attachments/assets/b0baa9aa-f4e8-4be3-bc6c-55979515fdaa" width="200" alt="No Local Posts View">
+</p>
 ---
 
 ## 🚀 Features
