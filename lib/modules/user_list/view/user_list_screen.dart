@@ -81,8 +81,8 @@ class _UserListScreenState extends State<UserListScreen> {
                       onRetry: () {
                         _searchController.clear();
                         context.read<UserListBloc>().add(
-                              const UserListFetchUsers(),
-                            );
+                          const UserListFetchUsers(),
+                        );
                       },
                     );
                   }
@@ -116,15 +116,16 @@ class _UserListScreenState extends State<UserListScreen> {
                       child: ListView.builder(
                         controller: _scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: (hasReachedMax && !isLoadingMore)
-                            ? users.length
-                            : users.length + 1,
+                        itemCount:
+                            (hasReachedMax && !isLoadingMore)
+                                ? users.length
+                                : users.length + 1,
                         itemBuilder: (context, index) {
                           if (index >= users.length) {
                             return (!hasReachedMax)
                                 ? const UserListLoadingIndicator(
-                                    margin: EdgeInsets.symmetric(vertical: 16),
-                                  )
+                                  margin: EdgeInsets.symmetric(vertical: 16),
+                                )
                                 : const SizedBox.shrink();
                           }
                           final user = users[index];

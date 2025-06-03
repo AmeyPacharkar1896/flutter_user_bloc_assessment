@@ -17,23 +17,27 @@ class UserListSearchBar extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Search User by name',
               prefixIcon: const Icon(Icons.search),
-              suffixIcon: value.text.isNotEmpty
-                  ? IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        controller.clear();
-                      },
-                    )
-                  : null,
+              suffixIcon:
+                  value.text.isNotEmpty
+                      ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          controller.clear();
+                        },
+                      )
+                      : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25.0),
                 borderSide: BorderSide.none,
               ),
               filled: true,
-              fillColor: Theme.of(context).inputDecorationTheme.fillColor ??
+              fillColor:
+                  Theme.of(context).inputDecorationTheme.fillColor ??
                   Colors.grey[200],
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 0,
+              ),
             ),
           );
         },

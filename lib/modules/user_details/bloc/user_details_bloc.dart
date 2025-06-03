@@ -59,8 +59,7 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
         fetchedUser = results[0] as User;
       }
 
-      final 
-      postListResponse = results[postsIndex] as PostListResponse;
+      final postListResponse = results[postsIndex] as PostListResponse;
       final todoListResponse = results[todosIndex] as TodoListResponse;
 
       emit(

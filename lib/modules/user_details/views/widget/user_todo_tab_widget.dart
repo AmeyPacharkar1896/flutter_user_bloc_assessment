@@ -87,10 +87,9 @@ class UserTodosTabWidget extends StatelessWidget {
                   : Icons.radio_button_unchecked_outlined,
               color:
                   todo.completed
-                      ? Colors.green
-                      : Theme.of(
-                        context,
-                      ).colorScheme.onSurface..withAlpha((0.6 * 255).toInt()),
+                        ? Colors.green
+                        : Theme.of(context).colorScheme.onSurface
+                    ..withAlpha((0.6 * 255).toInt()),
             ),
             // Optional: add onTap to toggle completion if supported
             // onTap: () {

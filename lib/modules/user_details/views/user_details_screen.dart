@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/bloc/user_details_bloc.dart';
-import 'package:flutter_user_bloc_assessment/modules/user_details/views/user_details_view.dart'; // For retry logic
+import 'package:flutter_user_bloc_assessment/modules/user_details/views/user_detail_scroll_controller.dart';
+import 'package:flutter_user_bloc_assessment/modules/user_details/views/user_details_view.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/user_info_header_widget.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/user_post_tab_widget.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/user_todo_tab_widget.dart';
@@ -14,39 +15,20 @@ class UserDetailsScreen extends StatefulWidget {
 }
 
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
-  late ScrollController _scrollController;
-  double _titleOpacity = 0.0;
-
-  // Threshold at which the app bar title becomes fully opaque
-  static const double _opacityThreshold = 150.0;
+  late UserDetailsScrollController _controller;
 
   @override
   void initState() {
     super.initState();
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
+    _controller = UserDetailsScrollController();
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
-  void _scrollListener() {
-    final offset = _scrollController.offset;
-    double newOpacity = (offset / _opacityThreshold).clamp(0.0, 1.0);
-
-    if (newOpacity != _titleOpacity) {
-      setState(() {
-        _titleOpacity = newOpacity;
-      });
-    }
-  }
-
-  // Retry and refresh functions from your original code (unchanged)
   void _retryFetchAll(BuildContext context) {
     final detailsViewWidget =
         context.findAncestorWidgetOfExactType<UserDetailsView>();
@@ -121,11 +103,13 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           }
         },
         builder: (context, state) {
-          if (state.userState == UserDetailsStatus.loading && state.user == null) {
+          if (state.userState == UserDetailsStatus.loading &&
+              state.user == null) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (state.userState == UserDetailsStatus.failure && state.user == null) {
+          if (state.userState == UserDetailsStatus.failure &&
+              state.user == null) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -163,7 +147,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  state.errorMessage ?? 'User data not available. Please try again.',
+                  state.errorMessage ??
+                      'User data not available. Please try again.',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -175,14 +160,19 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             child: DefaultTabController(
               length: 2,
               child: NestedScrollView(
-                controller: _scrollController, // <-- Attach controller here
+                controller: _controller.scrollController,
                 physics: const AlwaysScrollableScrollPhysics(
                   parent: BouncingScrollPhysics(),
                 ),
-                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                headerSliverBuilder: (
+                  BuildContext context,
+                  bool innerBoxIsScrolled,
+                ) {
                   return <Widget>[
                     SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context,
+                      ),
                       sliver: SliverAppBar(
                         backgroundColor: appBarActualBackgroundColor,
                         pinned: true,
@@ -195,38 +185,38 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                           ),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
-
-                        // Use AnimatedOpacity to fade the title based on scroll
-                        title: AnimatedOpacity(
-                          opacity: _titleOpacity,
-                          duration: const Duration(milliseconds: 200),
-                          child: Text(
-                            user.fullName,
-                            style: TextStyle(color: appBarForegroundColor),
-                          ),
+                        title: ValueListenableBuilder<double>(
+                          valueListenable: _controller.titleOpacity,
+                          builder: (context, opacity, child) {
+                            return AnimatedOpacity(
+                              opacity: opacity,
+                              duration: const Duration(milliseconds: 200),
+                              child: Text(
+                                user.fullName,
+                                style: TextStyle(color: appBarForegroundColor),
+                              ),
+                            );
+                          },
                         ),
-
                         flexibleSpace: FlexibleSpaceBar(
                           background: UserInfoHeaderWidget(user: user),
                           collapseMode: CollapseMode.parallax,
                           titlePadding: EdgeInsets.zero,
-                          title: const SizedBox.shrink(), // No title here, it's in app bar
+                          title: const SizedBox.shrink(),
                         ),
-
                         bottom: TabBar(
                           indicatorColor: appBarForegroundColor,
                           labelColor: appBarForegroundColor,
-                          unselectedLabelColor: appBarForegroundColor.withAlpha((0.5 * 255).toInt()),
+                          unselectedLabelColor: appBarForegroundColor.withAlpha(
+                            (0.5 * 255).toInt(),
+                          ),
                           labelStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
                           unselectedLabelStyle: const TextStyle(
                             fontWeight: FontWeight.normal,
                           ),
-                          tabs: const [
-                            Tab(text: 'Posts'),
-                            Tab(text: 'Todos'),
-                          ],
+                          tabs: const [Tab(text: 'Posts'), Tab(text: 'Todos')],
                         ),
                       ),
                     ),
@@ -272,7 +262,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ),
             slivers: <Widget>[
               SliverOverlapInjector(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  context,
+                ),
               ),
               SliverFillRemaining(hasScrollBody: true, child: tabChild),
             ],

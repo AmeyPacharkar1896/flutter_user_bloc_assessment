@@ -14,7 +14,10 @@ class UserListItem extends StatelessWidget {
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
         leading: ClipOval(
           child: Image.network(
             user.image,
@@ -30,9 +33,11 @@ class UserListItem extends StatelessWidget {
                 child: Center(
                   child: CircularProgressIndicator(
                     strokeWidth: 2.0,
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                        : null,
+                    value:
+                        loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
                   ),
                 ),
               );
@@ -42,12 +47,19 @@ class UserListItem extends StatelessWidget {
                 width: 48,
                 height: 48,
                 color: Colors.grey[200],
-                child: Icon(Icons.person_outline, color: Colors.grey[600], size: 30),
+                child: Icon(
+                  Icons.person_outline,
+                  color: Colors.grey[600],
+                  size: 30,
+                ),
               );
             },
           ),
         ),
-        title: Text(user.fullName, style: const TextStyle(fontWeight: FontWeight.w600)),
+        title: Text(
+          user.fullName,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
         subtitle: Text(user.email, style: TextStyle(color: Colors.grey[700])),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         onTap: onTap,
