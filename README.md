@@ -8,20 +8,31 @@ Built as part of a Flutter assessment to showcase architectural best practices, 
 
 ## 📸 Screenshots
 
+## 📸 Screenshots
+
 ### 🧑 User List
-![Scrolled User List](assets/screenshots/scrolled_user_home_page.jpg)
-![Search in User List](assets/screenshots/search_home_page.jpg)
-![Pull to Refresh](assets/screenshots/pull_to_refresh_home_page.jpg)
+_Demonstrates user listing, infinite scroll, search, and pull-to-refresh functionality._
+<p float="left">
+  <img src="assets/screenshots/scrolled_user_home_page.jpg" width="200" alt="Scrolled User List">
+  <img src="assets/screenshots/search_home_page.jpg" width="200" alt="Search in User List">
+  <img src="assets/screenshots/pull_to_refresh_home_page.jpg" width="200" alt="Pull to Refresh User List">
+</p>
 
 ### 👤 User Details
-![User Details](assets/screenshots/user_details_page.jpg)
-![Collapsed Header + Tabs](assets/screenshots/user_details_todo_collapse.jpg)
+_Shows user-specific information with posts and todos in separate tabs, featuring a collapsing header._
+<p float="left">
+  <img src="assets/screenshots/user_details_page.jpg" width="200" alt="User Details">
+  <img src="assets/screenshots/user_details_todo_collapse.jpg" width="200" alt="Collapsed Header + Tabs">
+</p>
 
-### 📝 Local Post Creation
-![Create Post](assets/screenshots/add_post_screen.jpg)
-![My Posts](assets/screenshots/local_posts_page.jpg)
-![Delete Confirmation](assets/screenshots/local_post_delete.jpg)
-![No Local Posts](assets/screenshots/no_local_post.jpg)
+### 📝 Local Post Creation & Management
+_Functionality for creating, viewing, and deleting locally persisted posts._
+<p float="left">
+  <img src="assets/screenshots/add_post_screen.jpg" width="200" alt="Create Post Screen">
+  <img src="assets/screenshots/local_posts_page.jpg" width="200" alt="My Posts List">
+  <img src="assets/screenshots/local_post_delete.jpg" width="200" alt="Delete Confirmation">
+  <img src="assets/screenshots/no_local_post.jpg" width="200" alt="No Local Posts">
+</p>
 
 ---
 
@@ -171,6 +182,9 @@ lib/
 - IDE: VS Code or Android Studio with Flutter plugins
 
 ### 📥 Installation
+
+- Before running the app, ensure you have the Flutter SDK installed and set up on your machine. Follow the official [Flutter installation guide](https://flutter.dev/docs/get-started/install) if needed.
+- Before running,check that you have followed the steps to create the `.env` file as described below.
 
 ```bash
 git clone https://github.com/AmeyPacharkar1896/flutter_user_bloc_assessment.git
