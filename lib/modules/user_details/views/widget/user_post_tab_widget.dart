@@ -1,25 +1,22 @@
-// file: lib/modules/user_details/views/widget/user_post_tab_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/bloc/user_details_bloc.dart';
-// Assuming your Post model is here:
-// import 'package:flutter_user_bloc_assessment/core/models/post_models/post_model.dart';
+// Uncomment and adjust import below if you want Post model typing
+// import 'package:flutter_user_bloc_assessment/modules/user_details/model/post_models/post_model.dart';
 
 class UserPostsTabWidget extends StatelessWidget {
   const UserPostsTabWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Watch the BLoC state for updates
     final state = context.watch<UserDetailsBloc>().state;
 
-    // Handle loading state for posts
+    // Loading state
     if (state.postsStatus == UserDetailsStatus.loading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // Handle failure state for posts
+    // Failure state
     if (state.postsStatus == UserDetailsStatus.failure) {
       return Center(
         child: Padding(
@@ -34,8 +31,6 @@ class UserPostsTabWidget extends StatelessWidget {
               const SizedBox(height: 8),
               ElevatedButton(
                 onPressed: () {
-                  // To retry, we need the userId. Assuming UserDetailsBloc holds it
-                  // or we can get it from the state.user if it's loaded.
                   final userId = state.user?.id;
                   if (userId != null) {
                     context.read<UserDetailsBloc>().add(
@@ -43,7 +38,6 @@ class UserPostsTabWidget extends StatelessWidget {
                         userId: userId,
                         initialUser: state.user,
                       ),
-                      // Or a more specific event like FetchUserPostsEvent(userId) if you create one
                     );
                   }
                 },
@@ -55,7 +49,7 @@ class UserPostsTabWidget extends StatelessWidget {
       );
     }
 
-    // Handle empty state for posts
+    // Empty posts list
     if (state.posts.isEmpty) {
       return const Center(
         child: Padding(
@@ -65,9 +59,9 @@ class UserPostsTabWidget extends StatelessWidget {
       );
     }
 
-    // Display the list of posts
+    // Success: Show posts list
     return ListView.builder(
-      padding: const EdgeInsets.all(8.0), // General padding for the list
+      padding: const EdgeInsets.all(8.0),
       itemCount: state.posts.length,
       itemBuilder: (context, index) {
         final post = state.posts[index];
@@ -87,12 +81,7 @@ class UserPostsTabWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  post.body,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  // maxLines: 4, // Keep if you want to limit lines
-                  // overflow: TextOverflow.ellipsis,
-                ),
+                Text(post.body, style: Theme.of(context).textTheme.bodyMedium),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

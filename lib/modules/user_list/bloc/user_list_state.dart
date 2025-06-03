@@ -22,6 +22,8 @@ class UserListStateLoaded extends UserListState {
     this.currentQuery,
   });
 
+  /// Returns a new state with optionally updated values.
+  /// Use `clearQuery: true` to reset the search query.
   UserListStateLoaded copyWith({
     List<User>? users,
     bool? hasReachedMax,

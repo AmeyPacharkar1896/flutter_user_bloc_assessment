@@ -9,14 +9,11 @@ class CreatePostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create:
-          (_) => CreatePostBloc(
-            localPostRepository: RepositoryProvider.of<LocalPostRepository>(
-              context,
-            ),
-          ),
-      child: CreatePostScreen(),
+    return BlocProvider<CreatePostBloc>(
+      create: (context) => CreatePostBloc(
+        localPostRepository: RepositoryProvider.of<LocalPostRepository>(context),
+      ),
+      child: const CreatePostScreen(),
     );
   }
 }

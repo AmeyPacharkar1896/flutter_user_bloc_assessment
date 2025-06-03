@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/create_post/bloc/create_post_bloc.dart';
 
 class CreatePostScreen extends StatefulWidget {
-  CreatePostScreen({super.key});
+  const CreatePostScreen({super.key});
 
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -44,7 +44,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           }
         },
         builder: (context, state) {
-          bool isLoading = state is CreatePostStateLoading;
+          final isLoading = state is CreatePostStateLoading;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
@@ -55,7 +55,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 children: [
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.all(24.0),
+                      padding: const EdgeInsets.all(24.0),
                       child: Text(
                         "Add your new post",
                         style: Theme.of(context).textTheme.headlineSmall
@@ -137,8 +137,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     if (_formKey.currentState!.validate()) {
       context.read<CreatePostBloc>().add(
         CreatePostEventSubmitLocalPost(
-          title: _titleController.text,
-          body: _bodyController.text,
+          title: _titleController.text.trim(),
+          body: _bodyController.text.trim(),
         ),
       );
     }

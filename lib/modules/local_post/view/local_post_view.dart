@@ -12,9 +12,7 @@ class LocalPostView extends StatelessWidget {
     return BlocProvider(
       create:
           (context) => LocalPostBloc(
-            localPostRepository: RepositoryProvider.of<LocalPostRepository>(
-              context,
-            ),
+            localPostRepository: context.read<LocalPostRepository>(),
           ),
       child: const LocalPostScreen(),
     );

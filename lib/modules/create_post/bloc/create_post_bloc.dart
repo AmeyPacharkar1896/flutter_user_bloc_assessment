@@ -12,11 +12,9 @@ part 'create_post_state.dart';
 class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
   final LocalPostRepository _localPostRepository;
 
-  CreatePostBloc({
-    required LocalPostRepository localPostRepository,
-  }) // Constructor injection
-  : _localPostRepository = localPostRepository,
-       super(CreatePostStateInitial()) {
+  CreatePostBloc({required LocalPostRepository localPostRepository})
+    : _localPostRepository = localPostRepository,
+      super(CreatePostStateInitial()) {
     on<CreatePostEventSubmitLocalPost>(_onCreatePostEventSubmitLocalPost);
   }
 
@@ -26,7 +24,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
   ) async {
     emit(CreatePostStateLoading());
 
-    // Basic validation (could be moved to form or kept here)
+    // Basic validation
     if (event.title.trim().isEmpty) {
       emit(const CreatePostStateFailure(error: "Title cannot be empty."));
       return;

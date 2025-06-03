@@ -1,5 +1,3 @@
-// file: lib/modules/user_details/views/user_details_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/bloc/user_details_bloc.dart';
@@ -10,6 +8,20 @@ import 'package:flutter_user_bloc_assessment/modules/user_details/views/widget/u
 
 class UserDetailsScreen extends StatelessWidget {
   const UserDetailsScreen({super.key});
+
+  // Helper function for retrying fetch of all user details
+  void _retryFetchAll(BuildContext context) {
+    final detailsViewWidget =
+        context.findAncestorWidgetOfExactType<UserDetailsView>();
+    if (detailsViewWidget != null) {
+      context.read<UserDetailsBloc>().add(
+        UserDetailsEventFetchAllDetails(
+          userId: detailsViewWidget.userId,
+          initialUser: detailsViewWidget.initialUser,
+        ),
+      );
+    }
+  }
 
   // Helper function for the onRefresh callback
   Future<void> _refreshUserDetails(
@@ -49,15 +61,11 @@ class UserDetailsScreen extends StatelessWidget {
         theme.appBarTheme.backgroundColor ?? theme.colorScheme.primary;
     // Determine foreground color for AppBar elements (title, icons, tab text)
     final Color appBarForegroundColor =
-        theme
-            .appBarTheme
-            .titleTextStyle
-            ?.color ?? // Prefer title text style color
-        theme.appBarTheme.iconTheme?.color ?? // Then icon theme color
+        theme.appBarTheme.titleTextStyle?.color ??
+        theme.appBarTheme.iconTheme?.color ??
         (appBarActualBackgroundColor.computeLuminance() > 0.5
-            ? Colors
-                .black // If AppBar bg is light, use dark foreground
-            : Colors.white); // If AppBar bg is dark, use light foreground
+            ? Colors.black
+            : Colors.white);
 
     return Scaffold(
       body: BlocConsumer<UserDetailsBloc, UserDetailsState>(
@@ -76,19 +84,7 @@ class UserDetailsScreen extends StatelessWidget {
                   action: SnackBarAction(
                     label: 'Retry All',
                     textColor: theme.colorScheme.onError,
-                    onPressed: () {
-                      final detailsViewWidget =
-                          context
-                              .findAncestorWidgetOfExactType<UserDetailsView>();
-                      if (detailsViewWidget != null) {
-                        context.read<UserDetailsBloc>().add(
-                          UserDetailsEventFetchAllDetails(
-                            userId: detailsViewWidget.userId,
-                            initialUser: detailsViewWidget.initialUser,
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: () => _retryFetchAll(context),
                   ),
                 ),
               );
@@ -124,21 +120,7 @@ class UserDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () {
-                        final detailsViewWidget =
-                            context
-                                .findAncestorWidgetOfExactType<
-                                  UserDetailsView
-                                >();
-                        if (detailsViewWidget != null) {
-                          context.read<UserDetailsBloc>().add(
-                            UserDetailsEventFetchAllDetails(
-                              userId: detailsViewWidget.userId,
-                              initialUser: detailsViewWidget.initialUser,
-                            ),
-                          );
-                        }
-                      },
+                      onPressed: () => _retryFetchAll(context),
                       child: const Text('Retry'),
                     ),
                   ],
@@ -179,8 +161,7 @@ class UserDetailsScreen extends StatelessWidget {
                         context,
                       ),
                       sliver: SliverAppBar(
-                        backgroundColor:
-                            appBarActualBackgroundColor, // Explicit background color
+                        backgroundColor: appBarActualBackgroundColor,
                         title:
                             innerBoxIsScrolled
                                 ? Text(
@@ -191,8 +172,7 @@ class UserDetailsScreen extends StatelessWidget {
                                 )
                                 : null,
                         pinned: true,
-                        expandedHeight:
-                            280.0, // Adjust based on UserInfoHeaderWidget content
+                        expandedHeight: 280.0,
                         forceElevated: innerBoxIsScrolled,
                         leading: IconButton(
                           icon: Icon(
@@ -204,7 +184,6 @@ class UserDetailsScreen extends StatelessWidget {
                         flexibleSpace: FlexibleSpaceBar(
                           background: UserInfoHeaderWidget(user: user),
                           collapseMode: CollapseMode.parallax,
-                          // Effectively hide FlexibleSpaceBar's own title to prevent redundancy
                           titlePadding: EdgeInsets.zero,
                           title: const SizedBox.shrink(),
                         ),
@@ -215,7 +194,7 @@ class UserDetailsScreen extends StatelessWidget {
                               .withOpacity(0.7),
                           labelStyle: const TextStyle(
                             fontWeight: FontWeight.w600,
-                          ), // Make tab text bolder
+                          ),
                           unselectedLabelStyle: const TextStyle(
                             fontWeight: FontWeight.normal,
                           ),
@@ -248,7 +227,9 @@ class UserDetailsScreen extends StatelessWidget {
     );
   }
 
-  // Helper method for TabBarView children
+  /// Builds the scrollable tab content with proper overlap handling.
+  /// Uses [SliverOverlapInjector] to sync with [NestedScrollView]'s
+  /// [SliverOverlapAbsorber], and [SliverFillRemaining] to fill the rest.
   Widget _buildTabContent(
     BuildContext context,
     Widget tabChild,
@@ -270,11 +251,7 @@ class UserDetailsScreen extends StatelessWidget {
                   context,
                 ),
               ),
-              SliverFillRemaining(
-                hasScrollBody:
-                    true, // Crucial if tabChild is a ListView or similar
-                child: tabChild,
-              ),
+              SliverFillRemaining(hasScrollBody: true, child: tabChild),
             ],
           );
         },

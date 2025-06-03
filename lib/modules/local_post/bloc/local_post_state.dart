@@ -24,8 +24,8 @@ class LocalPostState extends Equatable {
     return LocalPostState(
       status: status ?? this.status,
       posts: posts ?? this.posts,
-      errorMessage: errorMessage ?? this.errorMessage,
-      successMessage: successMessage ?? this.successMessage,
+      errorMessage: errorMessage,
+      successMessage: successMessage,
     );
   }
 

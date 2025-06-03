@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_user_bloc_assessment/modules/user_details/model/post_models/post_list_response.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/model/post_models/post_model.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/model/todo_models/todo_list_response.dart';
@@ -19,16 +20,15 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
   UserDetailsBloc({required UserService userService})
     : _userService = userService,
       super(const UserDetailsState()) {
-    on<UserDetailsEventFetchAllDetails>(_onUserDetailsEventFetchAllDetails);
+    on<UserDetailsEventFetchAllDetails>(_onFetchAllDetails);
   }
 
-  Future<void> _onUserDetailsEventFetchAllDetails(
+  Future<void> _onFetchAllDetails(
     UserDetailsEventFetchAllDetails event,
     Emitter<UserDetailsState> emit,
   ) async {
-    log(
-      '[UserDetailsBloc] _onUserDetailsEventFetchAllDetails called for userId: ${event.userId}',
-    );
+    log('[UserDetailsBloc] Fetching details for userId: ${event.userId}');
+
     emit(
       state.copyWith(
         user: event.initialUser,
@@ -43,24 +43,21 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
     );
 
     try {
+      // Fetch user only if initialUser is null
       final results = await Future.wait([
-        // Fetch User if not passed initially
         if (event.initialUser == null)
-          _userService.fetchUserDetails(
-            event.userId,
-          ), // Ensure this method exists in UserService
-
+          _userService.fetchUserDetails(event.userId),
         _userService.fetchUserPosts(event.userId),
         _userService.fetchUserTodos(event.userId),
       ]);
 
       User? fetchedUser = event.initialUser;
+      int postsIndex = event.initialUser == null ? 1 : 0;
+      int todosIndex = event.initialUser == null ? 2 : 1;
+
       if (event.initialUser == null) {
         fetchedUser = results[0] as User;
       }
-
-      int postsIndex = (event.initialUser == null) ? 1 : 0;
-      int todosIndex = (event.initialUser == null) ? 2 : 1;
 
       final postListResponse = results[postsIndex] as PostListResponse;
       final todoListResponse = results[todosIndex] as TodoListResponse;
@@ -84,8 +81,7 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
         state.copyWith(
           userState:
               state.user == null ? UserDetailsStatus.failure : state.userState,
-          postsStatus:
-              UserDetailsStatus.failure, // Assume posts/todos might have failed
+          postsStatus: UserDetailsStatus.failure,
           todosStatus: UserDetailsStatus.failure,
           errorMessage: 'Failed to load details: ${e.toString()}',
         ),

@@ -1,9 +1,6 @@
-// file: lib/modules/user_details/views/widget/user_todo_tab_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/bloc/user_details_bloc.dart';
-// Assuming your Todo model is here:
 // import 'package:flutter_user_bloc_assessment/core/models/todo_models/todo_model.dart';
 
 class UserTodosTabWidget extends StatelessWidget {
@@ -11,15 +8,14 @@ class UserTodosTabWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Watch the BLoC state for updates
     final state = context.watch<UserDetailsBloc>().state;
 
-    // Handle loading state for todos
+    // Loading state
     if (state.todosStatus == UserDetailsStatus.loading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // Handle failure state for todos
+    // Failure state
     if (state.todosStatus == UserDetailsStatus.failure) {
       return Center(
         child: Padding(
@@ -41,7 +37,7 @@ class UserTodosTabWidget extends StatelessWidget {
                         userId: userId,
                         initialUser: state.user,
                       ),
-                      // Or a more specific event like FetchUserTodosEvent(userId)
+                      // Or consider a dedicated FetchUserTodosEvent(userId) event
                     );
                   }
                 },
@@ -53,7 +49,7 @@ class UserTodosTabWidget extends StatelessWidget {
       );
     }
 
-    // Handle empty state for todos
+    // Empty todos list
     if (state.todos.isEmpty) {
       return const Center(
         child: Padding(
@@ -63,9 +59,9 @@ class UserTodosTabWidget extends StatelessWidget {
       );
     }
 
-    // Display the list of todos
+    // Success: Display list of todos
     return ListView.builder(
-      padding: const EdgeInsets.all(8.0), // General padding for the list
+      padding: const EdgeInsets.all(8.0),
       itemCount: state.todos.length,
       itemBuilder: (context, index) {
         final todo = state.todos[index];
@@ -96,9 +92,9 @@ class UserTodosTabWidget extends StatelessWidget {
                         context,
                       ).colorScheme.onSurface.withOpacity(0.6),
             ),
-            // You could add an onTap to toggle completion if your API and BLoC supported it
+            // Optional: add onTap to toggle completion if supported
             // onTap: () {
-            //   // Dispatch event to toggle todo status
+            //   // Dispatch event to toggle todo completion
             // },
           ),
         );

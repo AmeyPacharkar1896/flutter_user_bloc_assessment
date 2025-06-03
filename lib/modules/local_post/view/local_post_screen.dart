@@ -1,9 +1,6 @@
-// file: lib/modules/local_post/presentation/local_post_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/local_post/bloc/local_post_bloc.dart';
-// Assuming LocalPostModel is accessible, ensure the import if needed
-// import 'package:flutter_user_bloc_assessment/modules/create_post/model/local_post_model.dart';
 
 class LocalPostScreen extends StatelessWidget {
   const LocalPostScreen({super.key});
@@ -15,7 +12,6 @@ class LocalPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LocalPostBloc, LocalPostState>(
-      // Use BlocConsumer
       listener: (context, state) {
         if (state.successMessage != null) {
           ScaffoldMessenger.of(context)
@@ -24,36 +20,30 @@ class LocalPostScreen extends StatelessWidget {
               SnackBar(
                 content: Text(state.successMessage!),
                 backgroundColor: Colors.green,
-                duration: const Duration(seconds: 2), // Optional: set duration
+                duration: const Duration(seconds: 2),
               ),
             );
-          // Important: We need to tell the BLoC to clear the success message
-          // so it doesn't show again on unrelated rebuilds.
-          // This could be a new event, or the BLoC can auto-clear it.
-          // For now, let's assume the BLoC handles clearing it when it emits the message
-          // (e.g. by emitting it once and then subsequent states don't have it,
-          // or by using `state.copyWith(clearSuccess: true)` in the next relevant state emission).
-          // The CreatePostBloc already does this with clearSuccess flag.
+          context.read<LocalPostBloc>().add(LocalPostEventClearMessages());
         }
-        // Optionally, handle errors via SnackBar too, though builder handles primary error UI
-        // if (state.status == LocalPostStatus.failure && state.errorMessage != null && !state.posts.isNotEmpty) {
-        //   ScaffoldMessenger.of(context)
-        //     ..hideCurrentSnackBar()
-        //     ..showSnackBar(
-        //       SnackBar(
-        //         content: Text('Error: ${state.errorMessage}'),
-        //         backgroundColor: Theme.of(context).colorScheme.error,
-        //       ),
-        //     );
-        // }
+
+        if (state.errorMessage != null) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage!),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          context.read<LocalPostBloc>().add(LocalPostEventClearMessages());
+        }
       },
       builder: (context, state) {
-        // Handle initial loading or loading when posts list is empty
         if (state.status == LocalPostStatus.loading && state.posts.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // Handle failure state
         if (state.status == LocalPostStatus.failure) {
           return Center(
             child: Padding(
@@ -90,10 +80,9 @@ class LocalPostScreen extends StatelessWidget {
           );
         }
 
-        // Handle empty state (even after successful load/refresh if no posts exist)
         if (state.posts.isEmpty) {
           return RefreshIndicator(
-            onRefresh: () => _refreshPosts(context), // Use helper
+            onRefresh: () => _refreshPosts(context),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(
@@ -138,26 +127,23 @@ class LocalPostScreen extends StatelessWidget {
           );
         }
 
-        // Display the list of posts with RefreshIndicator
         return RefreshIndicator(
-          onRefresh: () => _refreshPosts(context), // Use helper
+          onRefresh: () => _refreshPosts(context),
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(
               horizontal: 8.0,
               vertical: 12.0,
-            ), // Adjusted padding
+            ),
             itemCount: state.posts.length,
             itemBuilder: (context, index) {
               final post = state.posts[index];
               return Card(
-                margin: const EdgeInsets.symmetric(
-                  vertical: 6.0,
-                ), // Removed horizontal from here, handled by ListView padding
-                elevation: 2.5, // Slightly increased elevation
+                margin: const EdgeInsets.symmetric(vertical: 6.0),
+                elevation: 2.5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                ), // More rounded
+                ),
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(
                     vertical: 12.0,
@@ -171,9 +157,7 @@ class LocalPostScreen extends StatelessWidget {
                     ),
                   ),
                   subtitle: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8.0,
-                    ), // Increased top padding
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       post.body,
                       maxLines: 3,
@@ -181,7 +165,7 @@ class LocalPostScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.black87,
                         height: 1.4,
-                      ), // Improved readability
+                      ),
                     ),
                   ),
                   trailing: IconButton(

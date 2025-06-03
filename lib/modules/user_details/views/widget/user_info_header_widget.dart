@@ -1,4 +1,3 @@
-// file: lib/modules/user_details/views/widget/user_info_header_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_model.dart';
 
@@ -10,23 +9,15 @@ class UserInfoHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    // For a header section, you might want to use card-like styling or just padding
-    // The background color will come from its parent or be transparent.
 
     return Container(
       padding: EdgeInsets.only(
-        top:
-            MediaQuery.of(context).padding.top +
-            45.0, // Add status bar height + some padding
+        top: MediaQuery.of(context).padding.top + 45.0,
         left: 16.0,
         right: 16.0,
-        bottom: 16.0, // Add some padding at the bottom
+        bottom: 16.0,
       ),
-      // color: Theme.of(context).colorScheme.surfaceVariant, // Optional: subtle background
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor, // Match your app bar color
-        // boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))]
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -35,7 +26,8 @@ class UserInfoHeaderWidget extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundImage: NetworkImage(user.image),
+                backgroundImage:
+                    user.image.isNotEmpty ? NetworkImage(user.image) : null,
                 onBackgroundImageError: (exception, stackTrace) {},
                 child:
                     user.image.isEmpty
@@ -106,27 +98,21 @@ class UserInfoHeaderWidget extends StatelessWidget {
               ),
             ],
           ),
-          // No need for SizedBox(height: 10) at the end if it's the last item in its container.
         ],
       ),
     );
   }
 
   Widget _buildDetailItem(BuildContext context, IconData icon, String text) {
+    final color = Theme.of(context).colorScheme.onPrimary.withOpacity(0.85);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          size: 16,
-          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.85),
-        ),
+        Icon(icon, size: 16, color: color),
         const SizedBox(width: 6),
         Text(
           text,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.85),
-          ),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: color),
         ),
       ],
     );
