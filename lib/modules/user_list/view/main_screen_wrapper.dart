@@ -5,8 +5,8 @@ import 'package:flutter_user_bloc_assessment/modules/create_post/model/local_pos
 import 'package:flutter_user_bloc_assessment/modules/create_post/view/create_post_view.dart';
 import 'package:flutter_user_bloc_assessment/modules/local_post/bloc/local_post_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/local_post/view/local_post_screen.dart';
-import 'package:flutter_user_bloc_assessment/modules/service/local_post_repository.dart';
-import 'package:flutter_user_bloc_assessment/modules/service/user_service.dart';
+import 'package:flutter_user_bloc_assessment/core/service/local_post_repository.dart';
+import 'package:flutter_user_bloc_assessment/core/service/user_service.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_list/bloc/user_list_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_list/view/user_list_screen.dart';
 

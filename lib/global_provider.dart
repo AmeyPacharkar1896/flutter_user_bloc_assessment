@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_user_bloc_assessment/modules/create_post/bloc/create_post_bloc.dart';
-import 'package:flutter_user_bloc_assessment/modules/service/local_post_repository.dart';
-import 'package:flutter_user_bloc_assessment/modules/service/user_service.dart';
+import 'package:flutter_user_bloc_assessment/core/service/local_post_repository.dart';
+import 'package:flutter_user_bloc_assessment/core/service/user_service.dart';
 
 class GlobalProvider extends StatelessWidget {
   const GlobalProvider({super.key, required this.child});

@@ -9,7 +9,7 @@ import 'package:flutter_user_bloc_assessment/modules/user_details/model/post_mod
 import 'package:flutter_user_bloc_assessment/modules/user_details/model/todo_models/todo_list_response.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_details/model/todo_models/todo_model.dart';
 import 'package:flutter_user_bloc_assessment/modules/user_list/model/user_model.dart';
-import 'package:flutter_user_bloc_assessment/modules/service/user_service.dart';
+import 'package:flutter_user_bloc_assessment/core/service/user_service.dart';
 
 part 'user_details_event.dart';
 part 'user_details_state.dart';
@@ -59,7 +59,8 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
         fetchedUser = results[0] as User;
       }
 
-      final postListResponse = results[postsIndex] as PostListResponse;
+      final 
+      postListResponse = results[postsIndex] as PostListResponse;
       final todoListResponse = results[todosIndex] as TodoListResponse;
 
       emit(
