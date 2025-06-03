@@ -14,7 +14,14 @@ class UserInfoHeaderWidget extends StatelessWidget {
     // The background color will come from its parent or be transparent.
 
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.only(
+        top:
+            MediaQuery.of(context).padding.top +
+            45.0, // Add status bar height + some padding
+        left: 16.0,
+        right: 16.0,
+        bottom: 16.0, // Add some padding at the bottom
+      ),
       // color: Theme.of(context).colorScheme.surfaceVariant, // Optional: subtle background
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor, // Match your app bar color

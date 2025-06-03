@@ -16,9 +16,6 @@ class UserDetailsScreen extends StatelessWidget {
     BuildContext context,
     UserDetailsState currentState,
   ) async {
-    // We need the current userId to refresh.
-    // It's safest to get it from the current state's user object if available,
-    // or from the UserDetailsView widget which holds the initial userId.
     int? userIdToRefresh = currentState.user?.id;
 
     if (userIdToRefresh == null) {
@@ -40,18 +37,31 @@ class UserDetailsScreen extends StatelessWidget {
         ),
       );
     }
-    // If userId cannot be determined, do nothing or complete the future immediately
+    // If userId cannot be determined, complete the future immediately
     return Future.value();
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    // Determine effective background color of the AppBar for contrast calculation
+    final Color appBarActualBackgroundColor =
+        theme.appBarTheme.backgroundColor ?? theme.colorScheme.primary;
+    // Determine foreground color for AppBar elements (title, icons, tab text)
+    final Color appBarForegroundColor =
+        theme
+            .appBarTheme
+            .titleTextStyle
+            ?.color ?? // Prefer title text style color
+        theme.appBarTheme.iconTheme?.color ?? // Then icon theme color
+        (appBarActualBackgroundColor.computeLuminance() > 0.5
+            ? Colors
+                .black // If AppBar bg is light, use dark foreground
+            : Colors.white); // If AppBar bg is dark, use light foreground
 
     return Scaffold(
       body: BlocConsumer<UserDetailsBloc, UserDetailsState>(
         listener: (context, state) {
-          // Your existing listener code (for SnackBars)
           if (state.errorMessage != null &&
               (state.postsStatus == UserDetailsStatus.failure ||
                   state.todosStatus == UserDetailsStatus.failure ||
@@ -85,13 +95,11 @@ class UserDetailsScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          // Loading state for the entire screen if user data isn't available yet
           if (state.userState == UserDetailsStatus.loading &&
               state.user == null) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // Failure state if user data couldn't be loaded
           if (state.userState == UserDetailsStatus.failure &&
               state.user == null) {
             return Center(
@@ -100,11 +108,21 @@ class UserDetailsScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: theme.colorScheme.error,
+                      size: 48,
+                    ),
+                    const SizedBox(height: 16),
                     Text(
                       state.errorMessage ?? 'Failed to load user data.',
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: theme.colorScheme.error,
+                      ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
                         final detailsViewWidget =
@@ -135,28 +153,22 @@ class UserDetailsScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  state.errorMessage ?? 'User data not available.',
+                  state.errorMessage ??
+                      'User data not available. Please try again.',
                   textAlign: TextAlign.center,
                 ),
               ),
             );
           }
 
-          final appBarForegroundColor =
-              theme.appBarTheme.foregroundColor ??
-              (theme.colorScheme.primary.computeLuminance() > 0.5
-                  ? Colors.black
-                  : Colors.white);
-
           return RefreshIndicator(
-            onRefresh:
-                () => _refreshUserDetails(context, state), // Use the helper
+            onRefresh: () => _refreshUserDetails(context, state),
             child: DefaultTabController(
               length: 2,
               child: NestedScrollView(
                 physics: const AlwaysScrollableScrollPhysics(
                   parent: BouncingScrollPhysics(),
-                ), // Ensure scroll for refresh
+                ),
                 headerSliverBuilder: (
                   BuildContext context,
                   bool innerBoxIsScrolled,
@@ -167,8 +179,20 @@ class UserDetailsScreen extends StatelessWidget {
                         context,
                       ),
                       sliver: SliverAppBar(
+                        backgroundColor:
+                            appBarActualBackgroundColor, // Explicit background color
+                        title:
+                            innerBoxIsScrolled
+                                ? Text(
+                                  user.fullName,
+                                  style: TextStyle(
+                                    color: appBarForegroundColor,
+                                  ),
+                                )
+                                : null,
                         pinned: true,
-                        expandedHeight: 250.0,
+                        expandedHeight:
+                            280.0, // Adjust based on UserInfoHeaderWidget content
                         forceElevated: innerBoxIsScrolled,
                         leading: IconButton(
                           icon: Icon(
@@ -180,12 +204,21 @@ class UserDetailsScreen extends StatelessWidget {
                         flexibleSpace: FlexibleSpaceBar(
                           background: UserInfoHeaderWidget(user: user),
                           collapseMode: CollapseMode.parallax,
+                          // Effectively hide FlexibleSpaceBar's own title to prevent redundancy
+                          titlePadding: EdgeInsets.zero,
+                          title: const SizedBox.shrink(),
                         ),
                         bottom: TabBar(
                           indicatorColor: appBarForegroundColor,
                           labelColor: appBarForegroundColor,
                           unselectedLabelColor: appBarForegroundColor
                               .withOpacity(0.7),
+                          labelStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                          ), // Make tab text bolder
+                          unselectedLabelStyle: const TextStyle(
+                            fontWeight: FontWeight.normal,
+                          ),
                           tabs: const [Tab(text: 'Posts'), Tab(text: 'Todos')],
                         ),
                       ),
@@ -215,7 +248,7 @@ class UserDetailsScreen extends StatelessWidget {
     );
   }
 
-  // Helper method from before - this correctly handles overlap
+  // Helper method for TabBarView children
   Widget _buildTabContent(
     BuildContext context,
     Widget tabChild,
@@ -228,7 +261,6 @@ class UserDetailsScreen extends StatelessWidget {
         builder: (BuildContext context) {
           return CustomScrollView(
             key: PageStorageKey<String>(pageStorageKey),
-            // It's important that the inner scroll views also allow scrolling for the RefreshIndicator to work well.
             physics: const AlwaysScrollableScrollPhysics(
               parent: BouncingScrollPhysics(),
             ),
@@ -238,7 +270,11 @@ class UserDetailsScreen extends StatelessWidget {
                   context,
                 ),
               ),
-              SliverFillRemaining(hasScrollBody: true, child: tabChild),
+              SliverFillRemaining(
+                hasScrollBody:
+                    true, // Crucial if tabChild is a ListView or similar
+                child: tabChild,
+              ),
             ],
           );
         },
