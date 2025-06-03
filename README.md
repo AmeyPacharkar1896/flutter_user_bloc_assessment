@@ -111,7 +111,8 @@ Each BLoC:
 - Emits states (e.g., loading, loaded, error) to update the UI reactively.
 
 ### 📁 Folder Structure
-
+```bash
+flutter_user_bloc_assessment/
 lib/
 ├── application.dart        # Root widget containing MaterialApp and global providers.
 ├── global_provider.dart    # Sets up Global RepositoryProviders/BlocProviders.
@@ -147,6 +148,7 @@ lib/
     │   │   └── user_model.dart # User model for API data.
     │   └── view/           # UserListScreen/View and related widgets.
 
+````
 
 - **Modular by Feature:** Each module has its own `bloc/`, `model/`, `view/`.
 - **Core Layer:** Contains shared services and configuration logic.
