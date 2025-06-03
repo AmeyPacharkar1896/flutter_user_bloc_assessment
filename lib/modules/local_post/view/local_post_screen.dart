@@ -111,7 +111,7 @@ class LocalPostScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Pull down to refresh, or create a new post.',
+                              'Create a new post.',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(color: Colors.grey[500]),
                               textAlign: TextAlign.center,

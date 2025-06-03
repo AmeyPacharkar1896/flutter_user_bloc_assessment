@@ -86,8 +86,9 @@ class UserListBloc extends Bloc<UserListEvent, UserListState> {
     Emitter<UserListState> emit,
   ) async {
     final currentState = state;
-    if (currentState is! UserListStateLoaded || currentState.hasReachedMax)
+    if (currentState is! UserListStateLoaded || currentState.hasReachedMax) {
       return;
+    }
 
     try {
       final response = await _userService.fetchUserList(

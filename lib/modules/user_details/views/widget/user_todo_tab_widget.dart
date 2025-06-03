@@ -90,7 +90,7 @@ class UserTodosTabWidget extends StatelessWidget {
                       ? Colors.green
                       : Theme.of(
                         context,
-                      ).colorScheme.onSurface.withOpacity(0.6),
+                      ).colorScheme.onSurface..withAlpha((0.6 * 255).toInt()),
             ),
             // Optional: add onTap to toggle completion if supported
             // onTap: () {

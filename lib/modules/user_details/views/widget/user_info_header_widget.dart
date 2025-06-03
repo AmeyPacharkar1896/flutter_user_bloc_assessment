@@ -59,7 +59,7 @@ class UserInfoHeaderWidget extends StatelessWidget {
                       style: textTheme.titleMedium?.copyWith(
                         color: Theme.of(
                           context,
-                        ).colorScheme.onPrimary.withOpacity(0.85),
+                        ).colorScheme.onPrimary..withAlpha((0.85 * 255).toInt()),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -104,7 +104,7 @@ class UserInfoHeaderWidget extends StatelessWidget {
   }
 
   Widget _buildDetailItem(BuildContext context, IconData icon, String text) {
-    final color = Theme.of(context).colorScheme.onPrimary.withOpacity(0.85);
+    final color = Theme.of(context).colorScheme.onPrimary..withAlpha((0.85 * 255).toInt());;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

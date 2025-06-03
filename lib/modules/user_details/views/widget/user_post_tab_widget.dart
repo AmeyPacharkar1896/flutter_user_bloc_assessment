@@ -93,7 +93,7 @@ class UserPostsTabWidget extends StatelessWidget {
                           size: 16,
                           color: Theme.of(
                             context,
-                          ).textTheme.bodySmall?.color?.withOpacity(0.7),
+                          ).textTheme.bodySmall?.color?..withAlpha((0.7 * 255).toInt()),
                         ),
                         const SizedBox(width: 4),
                         Text(

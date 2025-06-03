@@ -8,12 +8,20 @@ Built as part of a Flutter assessment to showcase architectural best practices, 
 
 ## 📸 Screenshots
 
-> *(Include these if possible)*
+### 🧑 User List
+![Scrolled User List](assets/screenshots/scrolled_user_home_page.jpg)
+![Search in User List](assets/screenshots/search_home_page.jpg)
+![Pull to Refresh](assets/screenshots/pull_to_refresh_home_page.jpg)
 
-- **User List:** Shows infinite scrolling, search, and pull-to-refresh.
-- **User Detail:** Tabs for viewing posts and todos.
-- **Create Post:** Form to add a post locally.
-- **My Posts:** Lists all locally created posts.
+### 👤 User Details
+![User Details](assets/screenshots/user_details_page.jpg)
+![Collapsed Header + Tabs](assets/screenshots/user_details_todo_collapse.jpg)
+
+### 📝 Local Post Creation
+![Create Post](assets/screenshots/add_post_screen.jpg)
+![My Posts](assets/screenshots/local_posts_page.jpg)
+![Delete Confirmation](assets/screenshots/local_post_delete.jpg)
+![No Local Posts](assets/screenshots/no_local_post.jpg)
 
 ---
 
