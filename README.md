@@ -8,31 +8,31 @@ Built as part of a Flutter assessment to showcase architectural best practices, 
 
 ## 📸 Screenshots
 
-### 🧑 User List
+### 🧑 User List  
 _Demonstrates user listing, infinite scroll, search, and pull-to-refresh functionality._
-<p float="left">
-  <img src="assets/screenshots/scrolled_user_home_page.png" width="200" alt="Scrolled User List">
-  <img src="assets/screenshots/search_home_page.png" width="200" alt="Search in User List">
-  <img src="assets/screenshots/pull_to_refresh_home_page.png" width="200" alt="Pull to Refresh User List">
-</p>
 
-### 👤 User Details
+![Scrolled User List](assets/screenshots/scrolled_user_home_page.png)  
+![Search in User List](assets/screenshots/search_home_page.png)  
+![Pull to Refresh User List](assets/screenshots/pull_to_refresh_home_page.png)
+
+---
+
+### 👤 User Details  
 _Shows user-specific information with posts and todos in separate tabs, featuring a collapsing header._
-<p float="left">
-  <img src="assets/screenshots/user_detail_page.png" width="200" alt="User Details">
-  <img src="assets/screenshots/user_detail_todo_collapse.png" width="200" alt="Collapsed Header + Tabs">
-</p>
 
-### 📝 Local Post Creation & Management
+![User Details](assets/screenshots/user_detail_page.png)  
+![Collapsed Header + Tabs](assets/screenshots/user_detail_todo_collapse.png)
+
+---
+
+### 📝 Local Post Creation & Management  
 _Functionality for creating, viewing, and deleting locally persisted posts._
-<p float="left">
-  <img src="assets/screenshots/create_post_screen.png" width="200" alt="Create Post Screen">
-  <img src="assets/screenshots/local_posts_page.png" width="200" alt="My Posts List">
-  <img src="assets/screenshots/local_post_delete.png" width="200" alt="Delete Confirmation">
-  <img src="assets/screenshots/no_local_post.png" width="200" alt="No Local Posts">
-  <!-- Assuming you also have a screenshot for post_created_success.png from your file list -->
-  <img src="assets/screenshots/post_created_success.png" width="200" alt="Post Creation Success">
-</p>
+
+![Create Post Screen](https://github.com/user-attachments/assets/5ff4c0aa-4154-4ec4-af22-903c5c42f6f4)
+![My Posts List](assets/screenshots/local_posts_page.png)  
+![Delete Confirmation](assets/screenshots/local_post_delete.png)  
+![No Local Posts](assets/screenshots/no_local_post.png)  
+![Post Creation Success](assets/screenshots/post_created_success.png)
 
 ---
 
