@@ -13,25 +13,25 @@ Built as part of a Flutter assessment to showcase architectural best practices, 
 ### 🧑 User List
 _Demonstrates user listing, infinite scroll, search, and pull-to-refresh functionality._
 <p float="left">
-  <img src="assets/screenshots/scrolled_user_home_page.jpg" width="200" alt="Scrolled User List">
-  <img src="assets/screenshots/search_home_page.jpg" width="200" alt="Search in User List">
-  <img src="assets/screenshots/pull_to_refresh_home_page.jpg" width="200" alt="Pull to Refresh User List">
+  <img src="assets\screenshots\scrolled_user_home_page.jpg" width="200" alt="Scrolled User List">
+  <img src="assets\screenshots\search_home_page.jpg" width="200" alt="Search in User List">
+  <img src="assets\screenshots\pull_to_refresh_home_page.jpg" width="200" alt="Pull to Refresh User List">
 </p>
 
 ### 👤 User Details
 _Shows user-specific information with posts and todos in separate tabs, featuring a collapsing header._
 <p float="left">
-  <img src="assets/screenshots/user_details_page.jpg" width="200" alt="User Details">
-  <img src="assets/screenshots/user_details_todo_collapse.jpg" width="200" alt="Collapsed Header + Tabs">
+  <img src="assets\screenshots\user_detail_page.jpg" width="200" alt="User Details">
+  <img src="assets\screenshots\user_detail_todo_collapse.jpg" width="200" alt="Collapsed Header + Tabs">
 </p>
 
 ### 📝 Local Post Creation & Management
 _Functionality for creating, viewing, and deleting locally persisted posts._
 <p float="left">
-  <img src="assets/screenshots/add_post_screen.jpg" width="200" alt="Create Post Screen">
-  <img src="assets/screenshots/local_posts_page.jpg" width="200" alt="My Posts List">
-  <img src="assets/screenshots/local_post_delete.jpg" width="200" alt="Delete Confirmation">
-  <img src="assets/screenshots/no_local_post.jpg" width="200" alt="No Local Posts">
+  <img src="assets\screenshots\add_post_screen.jpg" width="200" alt="Create Post Screen">
+  <img src="assets\screenshots\local_posts_page.jpg" width="200" alt="My Posts List">
+  <img src="assets\screenshots\local_post_delete.jpg" width="200" alt="Delete Confirmation">
+  <img src="assets\screenshots\no_local_post.jpg" width="200" alt="No Local Posts">
 </p>
 
 ---
